@@ -13,6 +13,9 @@
     height: 25px;
     border: none;
     box-shadow: 0 0 4px 0 black;
+    &:focus {
+      outline: none;
+    }
   }
   &__list {
     position: absolute;
@@ -23,6 +26,15 @@
     box-shadow: 0 0 1px 0 black;
     height: 50px;
     overflow-y: scroll;
+    display: none;
+    &--active {
+      display: block;
+    }
+  }
+  &__list-element {
+    &:hover {
+      background-color: lightblue;
+    }
   }
   &__button {
     border: none;
