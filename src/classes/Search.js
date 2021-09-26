@@ -4,8 +4,19 @@ class Search {
     this.breedsList = [];
     this.input = document.querySelector('.search__input');
     this.autocompleteList = document.querySelector('.search__list');
-    this.inputWrapper = document.querySelector('.search__input-wrapper');
+    this.submitButton = document.querySelector('.search__button');
     this.liElements = document.querySelectorAll('.search__list-element');
+  }
+
+  createScrollList(dataArray) {
+    this.autocompleteList.textContent = '';
+    dataArray.forEach((element) => {
+      const liElement = document.createElement('li');
+      liElement.classList.add('search__list-element');
+      liElement.textContent = element;
+      this.addLiEvent(liElement);
+      this.autocompleteList.appendChild(liElement);
+    });
   }
 
   getBreedsList() {
@@ -23,30 +34,50 @@ class Search {
         }
       });
       this.breedsList.sort();
-      this.input.disabled = false;
+      // this.createScrollList(this.breedsList);
+      this.addInputListener();
+      this.addInitialEvents();
+      this.toggleDisableInteraction(false);
     })();
   }
 
-  addEvents() {
-    this.liElements.forEach((item) => {
-      item.addEventListener('mousedown', (e) => {
-        console.log(e.target.textContent);
-      });
+  addLiEvent(element) {
+    element.addEventListener('mousedown', (e) => {
+      this.input.value = e.target.textContent;
     });
+  }
+
+  handleInputChange(element) {
+    const dataList = this.breedsList.filter((item) => {
+      if (item.includes(element.value)) return item;
+    });
+    this.createScrollList(dataList);
+  }
+
+  addInputListener() {
     this.input.addEventListener('input', (e) => {
-      console.log(e.target.value);
+      this.handleInputChange(e.target);
     });
-    this.inputWrapper.addEventListener('focusin', (e) => {
+  }
+
+  addInitialEvents() {
+    this.input.addEventListener('focusin', (e) => {
+      this.handleInputChange(this.input);
       this.autocompleteList.classList.add('search__list--active');
     });
-    this.inputWrapper.addEventListener('focusout', (e) => {
+    this.input.addEventListener('focusout', (e) => {
       this.autocompleteList.classList.remove('search__list--active');
     });
   }
 
+  toggleDisableInteraction(value) {
+    this.input.disabled = value;
+    this.submitButton.disabled = value;
+  }
+
   init() {
-    this.input.disabled = true;
-    this.addEvents();
+    this.toggleDisableInteraction(true);
+
     this.getBreedsList();
   }
 }
