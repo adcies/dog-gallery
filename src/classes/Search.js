@@ -1,3 +1,6 @@
+import '../sass/Search.scss';
+import Gallery from './Gallery';
+
 class Search {
   constructor() {
     this.URL = 'https://dog.ceo/api/breeds/list/all';
@@ -6,6 +9,15 @@ class Search {
     this.autocompleteList = document.querySelector('.search__list');
     this.submitButton = document.querySelector('.search__button');
     this.liElements = document.querySelectorAll('.search__list-element');
+    this.gallery = new Gallery();
+  }
+
+  handleSubmit(e) {
+    const inputValue = this.input.value.trim();
+    if (inputValue) {
+      this.gallery.createGallery(inputValue);
+    }
+    this.input.value = '';
   }
 
   createScrollList(dataArray) {
@@ -34,7 +46,6 @@ class Search {
         }
       });
       this.breedsList.sort();
-      // this.createScrollList(this.breedsList);
       this.addInputListener();
       this.addInitialEvents();
       this.toggleDisableInteraction(false);
@@ -61,6 +72,7 @@ class Search {
   }
 
   addInitialEvents() {
+    this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     this.input.addEventListener('focusin', (e) => {
       this.handleInputChange(this.input);
       this.autocompleteList.classList.add('search__list--active');
