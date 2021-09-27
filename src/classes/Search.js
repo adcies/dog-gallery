@@ -13,9 +13,17 @@ class Search {
   }
 
   handleSubmit(e) {
-    const inputValue = this.input.value.trim();
+    const inputValue = this.input.value.trim().toLowerCase();
     if (inputValue) {
-      this.gallery.createGallery(inputValue);
+      if (
+        this.breedsList.some(
+          (item) => item.toLowerCase() === inputValue.toLowerCase()
+        )
+      ) {
+        this.gallery.createGallery(inputValue);
+      } else {
+        alert('Please, enter the correct breed!');
+      }
     }
     this.input.value = '';
   }
@@ -33,22 +41,33 @@ class Search {
 
   getBreedsList() {
     (async () => {
-      const response = await fetch(this.URL);
-      const data = await response.json();
-      const dataArray = Object.keys(data.message);
-      dataArray.forEach((item) => {
-        if (data.message[item].length) {
-          data.message[item].forEach((name) =>
-            this.breedsList.push(`${name} ${item}`)
-          );
+      try {
+        const response = await fetch(this.URL);
+        if (response.ok) {
+          const data = await response.json();
+          const dataArray = Object.keys(data.message);
+          dataArray.forEach((item) => {
+            if (data.message[item].length) {
+              data.message[item].forEach((name) =>
+                this.breedsList.push(`${name} ${item}`)
+              );
+            } else {
+              this.breedsList.push(item);
+            }
+          });
+          this.breedsList.sort();
+          this.addInputListener();
+          this.addInitialEvents();
+          this.toggleDisableInteraction(false);
         } else {
-          this.breedsList.push(item);
+          throw new Error(`Something went wrong - status: ${response.status}`);
         }
-      });
-      this.breedsList.sort();
-      this.addInputListener();
-      this.addInitialEvents();
-      this.toggleDisableInteraction(false);
+      } catch (err) {
+        console.log(err);
+        alert(
+          "Something went wrong - couldn't fetch data. Check the console for more details..."
+        );
+      }
     })();
   }
 
@@ -60,7 +79,7 @@ class Search {
 
   handleInputChange(element) {
     const dataList = this.breedsList.filter((item) => {
-      if (item.includes(element.value)) return item;
+      if (item.includes(element.value.trim().toLowerCase())) return item;
     });
     this.createScrollList(dataList);
   }

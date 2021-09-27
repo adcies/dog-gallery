@@ -29,6 +29,9 @@ class Gallery {
         }
       } catch (err) {
         console.log(err);
+        alert(
+          "Something went wrong - couldn't fetch data. Check the console for more details..."
+        );
       }
     })();
   }
