@@ -10,3 +10,19 @@
   height: 100vh;
   max-width: 1024px;
 }
+
+.btn {
+  border: none;
+  padding: 0 6px;
+  min-height: 25px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 4px 0 red;
+  text-transform: uppercase;
+  font-style: italic;
+  cursor: pointer;
+  transition: 0.1s;
+  &:hover {
+    box-shadow: 0 0 10px 0 red;
+  }
+}
