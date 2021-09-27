@@ -9,7 +9,7 @@ class Search {
     this.autocompleteList = document.querySelector('.search__list');
     this.submitButton = document.querySelector('.search__button');
     this.liElements = document.querySelectorAll('.search__list-element');
-    this.gallery = new Gallery();
+    this.gallery = new Gallery(this.toggleDisableInteraction.bind(this));
   }
 
   handleSubmit(e) {
@@ -20,10 +20,7 @@ class Search {
           (item) => item.toLowerCase() === inputValue.toLowerCase()
         )
       ) {
-        this.gallery.createGallery(
-          inputValue,
-          this.toggleDisableInteraction.bind(this)
-        );
+        this.gallery.createGallery(inputValue);
       } else {
         alert('Please, enter the correct breed!');
       }

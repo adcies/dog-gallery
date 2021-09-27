@@ -1,7 +1,8 @@
 import '../sass/Gallery.scss';
 
 class Gallery {
-  constructor() {
+  constructor(callback) {
+    this.disableInteraction = callback;
     this.breed = '';
     this.subBreed = '';
     this.galleryWrapper = document.querySelector('.gallery');
@@ -16,10 +17,10 @@ class Gallery {
     return url;
   }
 
-  getImageURL(URL, callback) {
+  getImageURL(URL) {
     (async () => {
       try {
-        callback(true);
+        this.disableInteraction(true);
         const response = await fetch(URL);
         if (response.ok) {
           const data = await response.json();
@@ -34,14 +35,14 @@ class Gallery {
           "Something went wrong - couldn't fetch data. Check the console for more details..."
         );
       }
-      callback(false);
+      this.disableInteraction(false);
     })();
   }
 
-  createGallery(breed, callback) {
+  createGallery(breed) {
     const wordsArray = breed.split(' ').reverse();
     const url = this.createURL(wordsArray[0], wordsArray[1]);
-    this.getImageURL(url, callback);
+    this.getImageURL(url);
   }
 
   createResetButton() {
