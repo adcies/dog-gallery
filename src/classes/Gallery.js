@@ -16,9 +16,10 @@ class Gallery {
     return url;
   }
 
-  getImageURL(URL) {
+  getImageURL(URL, callback) {
     (async () => {
       try {
+        callback(true);
         const response = await fetch(URL);
         if (response.ok) {
           const data = await response.json();
@@ -33,13 +34,14 @@ class Gallery {
           "Something went wrong - couldn't fetch data. Check the console for more details..."
         );
       }
+      callback(false);
     })();
   }
 
-  createGallery(breed) {
+  createGallery(breed, callback) {
     const wordsArray = breed.split(' ').reverse();
     const url = this.createURL(wordsArray[0], wordsArray[1]);
-    this.getImageURL(url);
+    this.getImageURL(url, callback);
   }
 
   createResetButton() {

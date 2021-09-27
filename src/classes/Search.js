@@ -20,7 +20,10 @@ class Search {
           (item) => item.toLowerCase() === inputValue.toLowerCase()
         )
       ) {
-        this.gallery.createGallery(inputValue);
+        this.gallery.createGallery(
+          inputValue,
+          this.toggleDisableInteraction.bind(this)
+        );
       } else {
         alert('Please, enter the correct breed!');
       }
